@@ -4,14 +4,9 @@ public class TestGraphDraw {
     //Here is some example syntax for the GraphDraw class
     public static void main(String[] args) {
         GraphDraw frame = new GraphDraw("Test Window");
-
-        frame.setSize(1000,500);
-
+        frame.setSize(1500,500);
         frame.setVisible(true);
-        int level1 = 50;
-        int level2 = 100;
-        int level3 = 150;
-        int level4 = 200;
+
         Node n1 = new Node("1", new Node("",null,""), "");
         Node n5m12 = new Node("5m12", n1, "");
         Node n6d31 = new Node("6d31", n5m12, "L");
