@@ -36,18 +36,16 @@ class GraphDraw extends JFrame {
     }
 
 
-
-
     public void addNode(Node node) {
         //add a node at pixel (x,y)
         nodes.add(node);
         this.repaint();
     }
-    public void addEdge(int i, int j) {
-        //add an edge between nodes i and j
-        edges.add(new Edge(i,j));
-        this.repaint();
-    }
+//    public void addEdge(int i, int j) {
+//        //add an edge between nodes i and j
+//        edges.add(new Edge(i,j));
+//        this.repaint();
+//    }
 
     public void paint(Graphics g) { // draw the nodes and edges
         FontMetrics f = g.getFontMetrics();
@@ -62,10 +60,12 @@ class GraphDraw extends JFrame {
 //        }
         Node node;
         for (int index = 1; index < nodes.size(); index++){
-            System.out.println("index = " + index);
             node = nodes.get(index);
             g.setColor(Color.black);
             g.drawLine(node.parent.x, node.parent.y, node.x, node.y);
+            int centerX = (node.parent.x + node.x) / 2;
+            int centerY = (node.parent.y + node.y) / 2;
+            g.fillPolygon(new int[] {centerX-2,centerX+2,node.x}, new int[]{centerY-1,centerY+1,node.y}, 3);
 
         }
 

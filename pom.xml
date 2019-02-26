@@ -20,12 +20,6 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>com.sirolf2009</groupId>
-            <artifactId>fxgraph</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-        <!-- Thanks for using https://jar-download.com -->
 
     </dependencies>
 
