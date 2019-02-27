@@ -11,7 +11,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-class GraphDraw extends JFrame {
+public class GraphDraw extends JFrame {
     int width;
     int height;
 

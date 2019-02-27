@@ -1,6 +1,5 @@
 package draw;
 
-import javafx.scene.Parent;
 
 public class Node {
     int x, y;
