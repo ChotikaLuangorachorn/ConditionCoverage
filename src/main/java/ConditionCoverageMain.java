@@ -27,6 +27,7 @@ class ConditionCoverageMain{
         Node node = null;
         String[] line_or = null;
         Node last_node_else_if =null;
+        Stack<Node> last_nodes = new Stack<>();
         while((line = br.readLine()) != null) {
             //process the line
             System.out.print(i + "\t");
@@ -69,6 +70,7 @@ class ConditionCoverageMain{
                     node = new Node(name, nodes.peek(), "L");
                     nodes.push(node);
                     drawNodes.add(node);
+                    last_nodes.push(node);
                 } else if(line.indexOf("else") != -1 && brackets.peek().equals("if")){
                     brackets.pop();
                     brackets.push("else");
@@ -78,6 +80,7 @@ class ConditionCoverageMain{
                     node = new Node(name, nodes.peek(), "R");
                     nodes.push(node);
                     drawNodes.add(node);
+                    last_nodes.push(node);
                 }
 
             }
@@ -120,10 +123,12 @@ class ConditionCoverageMain{
                         name = (i+1) + "";
                         node = new Node(name, nodes.peek(), "L");
                         drawNodes.add(node);
+                        last_nodes.push(node);
 
                         name = (i+3) + "";
                         node = new Node(name, nodes.peek(), "R");
                         drawNodes.add(node);
+                        last_nodes.push(node);
                         brackets.pop();
                         brackets.pop();
                         brackets.push("else");
@@ -140,10 +145,12 @@ class ConditionCoverageMain{
                     name = (i+1) + "";
                     node = new Node(name, nodes.peek(), "L");
                     drawNodes.add(node);
+                    last_nodes.push(node);
 
                     name = (i+3) + "";
                     node = new Node(name, nodes.peek(), "R");
                     drawNodes.add(node);
+                    last_nodes.push(node);
 
 
                     num_elseif=num_elseif+1;
@@ -190,16 +197,18 @@ class ConditionCoverageMain{
 
                     name = (i+1) + "";
                     drawNodes.add(new Node( name, node, "L"));
+                    last_nodes.push(new Node( name, node, "L"));
                     name = (i+3) + "";
                     drawNodes.add(new Node( name, node, "R"));
+                    last_nodes.push(new Node( name, node, "R"));
                     brackets.pop();
                     brackets.pop();
-                    br.readLine();
-                    br.readLine();
-                    br.readLine();
-                    br.readLine();
-                    br.readLine();
                     line = br.readLine();
+                    line = br.readLine();
+                    line = br.readLine();
+                    line = br.readLine();
+                    line = br.readLine();
+                    line =  br.readLine();
                     i = i+6;
 
                 }
@@ -218,19 +227,36 @@ class ConditionCoverageMain{
                 name = (i+1) + "";
                 node = new Node(name, nodes.peek(), "L");
                 drawNodes.add(node);
+                last_nodes.push(node);
 
                 name = (i+3) + "";
                 node = new Node(name, nodes.peek(), "R");
                 drawNodes.add(node);
+                last_nodes.push(node);
 
             }
-
+            if (line.indexOf("return")!=-1){
+                break;
+            }
             i++;
             System.out.println("i = " + i);
             System.out.println(brackets);
 
 
         }
+        Node node_return = new Node(i+"",last_nodes.pop(),"L");
+        node_return.x = node_return.x - 1000;
+        node_return.y = node_return.y + 50;
+        drawNodes.add(node_return);
+        while (!last_nodes.empty()){
+            node = new Node(i+"",last_nodes.pop(),"L");
+            node.x= node_return.x;
+            node.y = node_return.y;
+
+
+            drawNodes.add(node);
+        }
+
         GraphDraw frame = new GraphDraw("Test Window");
         frame.setSize(1500, 800);
         frame.setVisible(true);
