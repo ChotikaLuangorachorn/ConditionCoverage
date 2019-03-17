@@ -65,7 +65,12 @@ public class GraphDraw extends JFrame {
             g.drawLine(node.parent.x, node.parent.y, node.x, node.y);
             int centerX = (node.parent.x + node.x) / 2;
             int centerY = (node.parent.y + node.y) / 2;
-            g.fillPolygon(new int[] {centerX-2,centerX+2,node.x}, new int[]{centerY-1,centerY+1,node.y}, 3);
+            if(node.position.equals("L")){
+                g.fillPolygon(new int[] {centerX-2,centerX+2,node.x}, new int[]{centerY-1,centerY+1,node.y}, 3);
+            }else if (node.position.equals("R")){
+                g.fillPolygon(new int[] {centerX-2,centerX+2,node.x}, new int[]{centerY+1,centerY-1,node.y}, 3);
+            }
+
 
         }
 
