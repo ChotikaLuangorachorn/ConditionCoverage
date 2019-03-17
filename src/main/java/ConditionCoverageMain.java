@@ -17,8 +17,6 @@ class ConditionCoverageMain{
             System.err.println("File not found.");
         }
         BufferedReader br = new BufferedReader(fr);
-        String bracket = "";
-
         String line;
         Stack<Node> nodes = new Stack<>();
         ArrayList<Node> drawNodes = new ArrayList<>();
@@ -27,7 +25,8 @@ class ConditionCoverageMain{
         boolean ifFirst = true;
         int num_elseif = 0;
         Node node = null;
-
+        String[] line_or = null;
+        Node last_node_else_if =null;
         while((line = br.readLine()) != null) {
             //process the line
             System.out.print(i + "\t");
@@ -99,40 +98,130 @@ class ConditionCoverageMain{
                 num_elseif = num_elseif +1;
 //                brackets.pop();
             }else if (num_elseif==1){
-                if (brackets.peek().equals("{")){
+                boolean leap = false;
+                if (brackets.peek().equals("{") & !leap){
                     if(line.indexOf("is") != -1){
                         brackets.push("if");
                         brackets.push("{");
                         name = i + " " + line.subSequence(line.indexOf("(") + 1, line.indexOf(")"));
                         node = new Node(name, nodes.peek(), "L");
+                        node.x = node.x -50;
                         nodes.push(node);
                         drawNodes.add(node);
                     }else{
-                        brackets.push("if");
-                        brackets.push("{");
+//                        brackets.push("if");
+//                        brackets.push("{");
                         name = i + " " + line.subSequence(line.indexOf("(") + 1, line.indexOf(")"));
                         node = new Node(name, nodes.peek(), "L");
+                        node.x = node.x -50;
                         nodes.push(node);
                         drawNodes.add(node);
 
                         name = (i+1) + "";
                         node = new Node(name, nodes.peek(), "L");
-                        nodes.push(node);
                         drawNodes.add(node);
-                        brackets.push("}");
-                    }
-                } else if (line.indexOf("else") != -1){
 
-                    brackets.push("else");
+                        name = (i+3) + "";
+                        node = new Node(name, nodes.peek(), "R");
+                        drawNodes.add(node);
+                        brackets.pop();
+                        brackets.pop();
+                        brackets.push("else");
+                        leap = true;
+
+                    }
+                }else if (i>18){
+                    nodes.pop();
                     brackets.push("{");
-                    brackets.push("}");
-                    name = (i+1) + "";
+                    name = i + " " + line.subSequence(line.indexOf("(") + 1, line.indexOf(")"));
                     node = new Node(name, nodes.peek(), "R");
-                    nodes.push(node);
                     drawNodes.add(node);
-                    num_elseif = num_elseif+1;
+                    nodes.push(node);
+                    name = (i+1) + "";
+                    node = new Node(name, nodes.peek(), "L");
+                    drawNodes.add(node);
+
+                    name = (i+3) + "";
+                    node = new Node(name, nodes.peek(), "R");
+                    drawNodes.add(node);
+
+
+                    num_elseif=num_elseif+1;
+                    brackets.pop();
+                    brackets.pop();
+
                 }
 
+            }
+
+            if(num_elseif==2){
+
+                if(line.indexOf("||") != -1){
+                    nodes.pop();
+                    nodes.pop();
+                    line = line.subSequence(line.indexOf("(") + 1, line.indexOf(")"))+"";
+                    System.out.println(line);
+                    line_or = line.split("\\|\\|");
+                    System.out.println(line_or.length);
+                    for (int s =0 ; s<line_or.length;s++) {
+                        name = i + line_or[s];
+                        node = new Node(name, nodes.peek(), "R");
+                        node.x = node.x +50;
+                        drawNodes.add(node);
+                        nodes.push(node);
+                        last_node_else_if = node;
+
+                    }
+                }else if (i>25){
+                    Node[] n =  new Node[line_or.length];
+
+                    for (int s = 0 ; s<line_or.length; s++) {
+                        name = i + " " + line.subSequence(line.indexOf("(") + 1, line.indexOf(")"));
+                        node = new Node( name, nodes.peek(), "L");
+                        node.x = node.x - 350;
+                        n[s] = node;
+                    }
+                    for ( Node no: n) {
+                        drawNodes.add(no);
+                        no.parent = nodes.pop();
+                        System.out.println(no);
+                    }
+                    num_elseif++;
+
+                    name = (i+1) + "";
+                    drawNodes.add(new Node( name, node, "L"));
+                    name = (i+3) + "";
+                    drawNodes.add(new Node( name, node, "R"));
+                    brackets.pop();
+                    brackets.pop();
+                    br.readLine();
+                    br.readLine();
+                    br.readLine();
+                    br.readLine();
+                    br.readLine();
+                    line = br.readLine();
+                    i = i+6;
+
+                }
+
+
+            }
+            if (num_elseif > 2 && brackets.empty()){
+                brackets.push("else");
+                brackets.push("{");
+                name = i + " " + line.subSequence(line.indexOf("(") + 1, line.indexOf(")"));
+                System.out.println(last_node_else_if);
+                node = new Node(name, last_node_else_if, "R");
+                drawNodes.add(node);
+                nodes.push(node);
+
+                name = (i+1) + "";
+                node = new Node(name, nodes.peek(), "L");
+                drawNodes.add(node);
+
+                name = (i+3) + "";
+                node = new Node(name, nodes.peek(), "R");
+                drawNodes.add(node);
 
             }
 
